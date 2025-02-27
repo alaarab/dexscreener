@@ -1,26 +1,33 @@
 {
-  "name": "dex-lens",
+  "name": "dexscreener",
   "version": "1.0.0",
-  "description": "A unified interface for fetching and normalizing token data across multiple DEX data providers",
+  "description": "A lightweight TypeScript wrapper for the DexScreener API",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
   "scripts": {
     "build": "tsc",
     "prepare": "npm run build",
     "test": "jest",
-    "test:watch": "jest --watch"
+    "prepublishOnly": "npm test && npm run build"
   },
   "keywords": [
-    "dex",
-    "token",
-    "crypto",
     "dexscreener",
-    "defined",
+    "api",
+    "defi",
+    "crypto",
+    "token",
     "price",
-    "market-data",
-    "defi"
+    "market-data"
   ],
-  "author": "",
+  "author": {
+    "name": "Ala Arab",
+    "url": "https://github.com/alaarab"
+  },
   "license": "ISC",
   "dependencies": {
     "axios": "^1.6.7"
@@ -41,10 +48,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/yourusername/dex-lens"
+    "url": "git+https://github.com/alaarab/dexscreener.git"
   },
   "bugs": {
-    "url": "https://github.com/yourusername/dex-lens/issues"
+    "url": "https://github.com/alaarab/dexscreener/issues"
   },
-  "homepage": "https://github.com/yourusername/dex-lens#readme"
+  "homepage": "https://github.com/alaarab/dexscreener#readme"
 }

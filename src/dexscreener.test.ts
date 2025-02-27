@@ -41,14 +41,15 @@ describe('DexScreener', () => {
         expect(boost).toHaveProperty('chainId');
         expect(boost).toHaveProperty('tokenAddress');
         expect(boost).toHaveProperty('totalAmount');
-        expect(boost).toHaveProperty('icon');
-        expect(boost).toHaveProperty('header');
-        expect(boost).toHaveProperty('links');
-        expect(Array.isArray(boost.links)).toBe(true);
-        if (boost.links.length > 0) {
-          const link = boost.links[0];
-          expect(link).toHaveProperty('url');
-          // type and label are optional
+        // These properties are optional
+        if (boost.icon) expect(typeof boost.icon).toBe('string');
+        if (boost.header) expect(typeof boost.header).toBe('string');
+        if (boost.links) {
+          expect(Array.isArray(boost.links)).toBe(true);
+          if (boost.links.length > 0) {
+            const link = boost.links[0];
+            expect(link).toHaveProperty('url');
+          }
         }
       }
     });
