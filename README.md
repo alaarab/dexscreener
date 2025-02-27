@@ -1,147 +1,120 @@
-# DexLens
+# DexScreener API Wrapper
 
-A unified interface for fetching and normalizing token data across multiple DEX data providers. Currently supports DexScreener with plans to add Defined.fi and other providers.
+A lightweight TypeScript wrapper for the DexScreener API, providing easy access to token data, pairs, and market information.
 
 ## Features
 
-- 🔄 Unified data format across different providers
+- 🚀 Simple, focused API wrapper
 - 📊 Real-time token price, volume, and liquidity data
 - 📈 Market metrics (market cap, FDV, price changes)
 - ⛓️ Multi-chain support
-- 🚀 TypeScript-ready
-- ✨ Clean, normalized data structures
+- 🔒 Type-safe with full TypeScript support
+- 📝 Comprehensive documentation and examples
 
 ## Installation
 
 ```bash
-npm install dex-lens
+npm install dexscreener-api
 ```
 
 ## Quick Start
 
 ```typescript
-import { getTokenInfo } from 'dex-lens';
+import { DexScreener } from 'dexscreener-api';
 
-// Fetch Solana token info
-const result = await getTokenInfo({
-  address: '9BB6NFEcjBCtnNLFko2FqVQBq8HHM13kCyYcdQbgpump',  // FartCoin
-  chainId: 'solana'
-});
+const dexscreener = new DexScreener();
 
-if (result.success) {
-  const {
-    name,
-    symbol,
-    price,
-    marketCap,
-    volume24h,
-    liquidity
-  } = result.data;
-  
-  console.log(`${symbol}: $${price.usd}`);
+// Search for pairs
+const pairs = await dexscreener.searchPairs('SOL', 'solana');
+console.log(`Found ${pairs.length} pairs`);
+console.log(`SOL price: $${pairs[0].priceUsd}`);
+
+// Get specific pair
+const pair = await dexscreener.getPair('JUPyiwrYJFskUPiHa7hkeR8VUtAeFoSYbKedZNsDvCN', 'solana');
+if (pair) {
+  console.log(`24h volume: $${pair.volume.h24}`);
+  console.log(`Liquidity: $${pair.liquidity.usd}`);
 }
+
+// Get token profiles
+const profiles = await dexscreener.getTokenProfiles();
+console.log(`Latest token: ${profiles[0].header}`);
 ```
 
-## Supported Data Providers
+## API Methods
 
-### DexScreener
-- Real-time price data
-- Volume and liquidity metrics
-- Market cap and FDV
-- Price change percentages
-- Trading pairs information
+### Token Information
 
-### Coming Soon
-- Defined.fi integration
-- GeckoTerminal support
-- Historical price data
-- Trading chart data
-- More metrics and analytics
-
-## Data Structure
-
-### Input Options
 ```typescript
-interface TokenLookupOptions {
-  address: string;
-  chainId?: string | number;  // Optional, defaults based on provider
-}
+// Get latest token profiles
+const profiles = await dexscreener.getTokenProfiles();
+
+// Get token orders
+const orders = await dexscreener.getTokenOrders('solana', 'tokenAddress');
 ```
 
-### Response Format
-```typescript
-interface TokenData {
-  symbol: string;
-  name: string;
-  address: string;
-  chainId: string | number;
-  decimals: number;
-  price: {
-    usd: number;
-    change24h?: number;
-  };
-  volume24h?: number;
-  liquidity?: {
-    usd: number;
-  };
-  marketCap?: number;
-  fdv?: number;
-  lastUpdated: Date;
-  source: 'dexscreener' | 'defined';
-}
+### Token Boosts
 
-interface TokenLookupResponse {
-  success: boolean;
-  data?: TokenData;
-  error?: string;
-}
+```typescript
+// Get latest boosted tokens
+const latestBoosts = await dexscreener.getLatestBoosts();
+
+// Get top boosted tokens
+const topBoosts = await dexscreener.getTopBoosts();
 ```
 
-## Advanced Usage
+### Pairs and Trading
 
-### Provider-Specific Queries
 ```typescript
-import { getDexScreenerTokenInfo } from 'dex-lens';
+// Search pairs (supports token address, symbol, or name)
+const searchResults = await dexscreener.searchPairs('SOL', 'solana');
 
-// Use DexScreener directly
-const dexScreenerResult = await getDexScreenerTokenInfo({
-  address: 'token_address',
-  chainId: 'solana'
-});
-```
+// Get specific pair
+const pair = await dexscreener.getPair('pairAddress', 'solana');
 
-### Error Handling
-```typescript
-const result = await getTokenInfo(options);
-
-if (!result.success) {
-  console.error('Error fetching token data:', result.error);
-  return;
-}
-
-// Safe to use result.data here
-const { price, volume24h } = result.data;
+// Get pairs by token
+const pairs = await dexscreener.getPairs('tokenAddress', 'solana');
 ```
 
 ## Rate Limits
 
-- DexScreener: 300 requests per minute
-- Defined.fi: Depends on your API plan (requires API key)
+DexScreener API has the following rate limits:
+- Token profiles, boosts, orders: 60 requests per minute
+- Pairs and search endpoints: 300 requests per minute
+
+## Error Handling
+
+The wrapper provides consistent error handling:
+
+```typescript
+try {
+  const pairs = await dexscreener.searchPairs('SOL', 'solana');
+  // Process pairs...
+} catch (error) {
+  console.error('Failed to search pairs:', error);
+}
+
+// getPair returns null if pair is not found
+const pair = await dexscreener.getPair('invalidAddress', 'solana');
+if (pair === null) {
+  console.log('Pair not found');
+}
+```
+
+## Project Structure
+
+```
+src/
+  ├── dexscreener.ts     # Main DexScreener class implementation
+  ├── dexscreener.test.ts # Tests
+  ├── types.ts           # TypeScript interfaces
+  └── index.ts           # Public exports
+```
 
 ## Contributing
 
-Contributions are welcome! Please check out our [Contributing Guide](CONTRIBUTING.md).
+Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## License
 
-ISC
-
-## Roadmap
-
-- [ ] Add Defined.fi integration
-- [ ] Add historical price data
-- [ ] Add trading chart data
-- [ ] Support for more chains
-- [ ] Batch token lookups
-- [ ] Websocket price updates
-- [ ] Cache layer for high-frequency queries 
+ISC 
