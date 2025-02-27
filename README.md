@@ -84,7 +84,7 @@ DexScreener API has the following rate limits:
 
 ## Error Handling
 
-The wrapper provides consistent error handling:
+The wrapper provides consistent error handling. Most methods will throw an error if the API request fails:
 
 ```typescript
 try {
@@ -93,11 +93,14 @@ try {
 } catch (error) {
   console.error('Failed to search pairs:', error);
 }
+```
 
-// getPair returns null if pair is not found
+The `getPair` method is special - it returns null if the pair is not found or if there's an error:
+
+```typescript
 const pair = await dexscreener.getPair('invalidAddress', 'solana');
 if (pair === null) {
-  console.log('Pair not found');
+  console.log('Pair not found or error occurred');
 }
 ```
 
