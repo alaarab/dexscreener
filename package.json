@@ -1,7 +1,7 @@
 {
-  "name": "token_lookup",
+  "name": "dex-lens",
   "version": "1.0.0",
-  "description": "A package to fetch and normalize token data from various sources",
+  "description": "A unified interface for fetching and normalizing token data across multiple DEX data providers",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
@@ -11,10 +11,14 @@
     "test:watch": "jest --watch"
   },
   "keywords": [
+    "dex",
     "token",
     "crypto",
     "dexscreener",
-    "defined"
+    "defined",
+    "price",
+    "market-data",
+    "defi"
   ],
   "author": "",
   "license": "ISC",
@@ -32,5 +36,13 @@
     "preset": "ts-jest",
     "testEnvironment": "node",
     "testMatch": ["**/__tests__/**/*.test.ts"]
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/dex-lens"
+  },
+  "bugs": {
+    "url": "https://github.com/yourusername/dex-lens/issues"
+  },
+  "homepage": "https://github.com/yourusername/dex-lens#readme"
 }
