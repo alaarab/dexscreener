@@ -1,5 +1,5 @@
 {
-  "name": "dexscreener",
+  "name": "dexscreener-wrapper",
   "version": "1.0.0",
   "description": "A lightweight TypeScript wrapper for the DexScreener API",
   "main": "dist/index.js",

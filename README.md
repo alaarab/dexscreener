@@ -14,13 +14,13 @@ A lightweight TypeScript wrapper for the DexScreener API, providing easy access 
 ## Installation
 
 ```bash
-npm install dexscreener
+npm install dexscreener-wrapper
 ```
 
 ## Quick Start
 
 ```typescript
-import { DexScreener } from 'dexscreener';
+import { DexScreener } from 'dexscreener-wrapper';
 
 const dexscreener = new DexScreener();
 
