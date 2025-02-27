@@ -1,55 +1,80 @@
-# Token Lookup Package
+# DexLens
 
-A Node.js package that fetches and normalizes token data from various sources including DexScreener and Defined.fi.
+A unified interface for fetching and normalizing token data across multiple DEX data providers. Currently supports DexScreener with plans to add Defined.fi and other providers.
+
+## Features
+
+- 🔄 Unified data format across different providers
+- 📊 Real-time token price, volume, and liquidity data
+- 📈 Market metrics (market cap, FDV, price changes)
+- ⛓️ Multi-chain support
+- 🚀 TypeScript-ready
+- ✨ Clean, normalized data structures
 
 ## Installation
 
 ```bash
-npm install token_lookup
+npm install dex-lens
 ```
 
-## Configuration
-
-For Defined.fi integration, you need to set up your API key as an environment variable:
-
-```bash
-export DEFINED_API_KEY=your_api_key_here
-```
-
-## Usage
+## Quick Start
 
 ```typescript
-import { getTokenInfo, getDexScreenerTokenInfo, getDefinedTokenInfo } from 'token_lookup';
+import { getTokenInfo } from 'dex-lens';
 
-// Fetch token info from all available sources (tries DexScreener first, then Defined)
-const tokenInfo = await getTokenInfo({
-  address: '0x123...', // Token contract address
-  chainId: 1 // Optional chain ID
+// Fetch Solana token info
+const result = await getTokenInfo({
+  address: '9BB6NFEcjBCtnNLFko2FqVQBq8HHM13kCyYcdQbgpump',  // FartCoin
+  chainId: 'solana'
 });
 
-// Fetch specifically from DexScreener
-const dexScreenerInfo = await getDexScreenerTokenInfo({
-  address: '0x123...',
-  chainId: 1
-});
-
-// Fetch specifically from Defined
-const definedInfo = await getDefinedTokenInfo({
-  address: '0x123...',
-  chainId: 1
-});
+if (result.success) {
+  const {
+    name,
+    symbol,
+    price,
+    marketCap,
+    volume24h,
+    liquidity
+  } = result.data;
+  
+  console.log(`${symbol}: $${price.usd}`);
+}
 ```
 
-## Response Format
+## Supported Data Providers
 
-The package returns data in a standardized format:
+### DexScreener
+- Real-time price data
+- Volume and liquidity metrics
+- Market cap and FDV
+- Price change percentages
+- Trading pairs information
 
+### Coming Soon
+- Defined.fi integration
+- GeckoTerminal support
+- Historical price data
+- Trading chart data
+- More metrics and analytics
+
+## Data Structure
+
+### Input Options
+```typescript
+interface TokenLookupOptions {
+  address: string;
+  chainId?: string | number;  // Optional, defaults based on provider
+}
+```
+
+### Response Format
 ```typescript
 interface TokenData {
   symbol: string;
   name: string;
   address: string;
-  chainId: number;
+  chainId: string | number;
   decimals: number;
   price: {
     usd: number;
@@ -59,16 +84,12 @@ interface TokenData {
   liquidity?: {
     usd: number;
   };
+  marketCap?: number;
+  fdv?: number;
   lastUpdated: Date;
   source: 'dexscreener' | 'defined';
 }
-```
 
-## Error Handling
-
-All methods return a `TokenLookupResponse` object:
-
-```typescript
 interface TokenLookupResponse {
   success: boolean;
   data?: TokenData;
@@ -76,6 +97,51 @@ interface TokenLookupResponse {
 }
 ```
 
+## Advanced Usage
+
+### Provider-Specific Queries
+```typescript
+import { getDexScreenerTokenInfo } from 'dex-lens';
+
+// Use DexScreener directly
+const dexScreenerResult = await getDexScreenerTokenInfo({
+  address: 'token_address',
+  chainId: 'solana'
+});
+```
+
+### Error Handling
+```typescript
+const result = await getTokenInfo(options);
+
+if (!result.success) {
+  console.error('Error fetching token data:', result.error);
+  return;
+}
+
+// Safe to use result.data here
+const { price, volume24h } = result.data;
+```
+
+## Rate Limits
+
+- DexScreener: 300 requests per minute
+- Defined.fi: Depends on your API plan (requires API key)
+
+## Contributing
+
+Contributions are welcome! Please check out our [Contributing Guide](CONTRIBUTING.md).
+
 ## License
 
-ISC 
+ISC
+
+## Roadmap
+
+- [ ] Add Defined.fi integration
+- [ ] Add historical price data
+- [ ] Add trading chart data
+- [ ] Support for more chains
+- [ ] Batch token lookups
+- [ ] Websocket price updates
+- [ ] Cache layer for high-frequency queries 
