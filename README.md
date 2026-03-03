@@ -1,15 +1,6 @@
 # DexScreener API Wrapper
 
-A lightweight TypeScript wrapper for the DexScreener API, providing easy access to token data, pairs, and market information.
-
-## Features
-
-- 🚀 Simple, focused API wrapper
-- 📊 Real-time token price, volume, and liquidity data
-- 📈 Market metrics (market cap, FDV, price changes)
-- ⛓️ Multi-chain support
-- 🔒 Type-safe with full TypeScript support
-- 📝 Comprehensive documentation and examples
+A lightweight TypeScript wrapper for the DexScreener API.
 
 ## Installation
 
@@ -17,7 +8,7 @@ A lightweight TypeScript wrapper for the DexScreener API, providing easy access 
 npm install dexscreener-wrapper
 ```
 
-## Quick Start
+## Usage
 
 ```typescript
 import { DexScreener } from 'dexscreener-wrapper';
@@ -84,40 +75,21 @@ DexScreener API has the following rate limits:
 
 ## Error Handling
 
-The wrapper provides consistent error handling. Most methods will throw an error if the API request fails:
+Most methods throw on failure. `getPair` returns `null` if the pair is not found.
 
 ```typescript
 try {
   const pairs = await dexscreener.searchPairs('SOL', 'solana');
-  // Process pairs...
 } catch (error) {
   console.error('Failed to search pairs:', error);
 }
-```
 
-The `getPair` method is special - it returns null if the pair is not found or if there's an error:
-
-```typescript
 const pair = await dexscreener.getPair('invalidAddress', 'solana');
 if (pair === null) {
   console.log('Pair not found or error occurred');
 }
 ```
 
-## Project Structure
-
-```
-src/
-  ├── dexscreener.ts     # Main DexScreener class implementation
-  ├── dexscreener.test.ts # Tests
-  ├── types.ts           # TypeScript interfaces
-  └── index.ts           # Public exports
-```
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
 ## License
 
-ISC 
+ISC
